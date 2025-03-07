@@ -284,6 +284,7 @@ def fetch_blocklot_geometry(db, blocklot: str) -> str:
     results = db.run_query(query, (blocklot,))
     if len(results) == 0:
         raise RecordNotFoundError("No records found for blocklot {}".format(blocklot))
+    logger.debug(f'Found record for blocklot: {blocklot}')
     return results[0][0]
 
 
@@ -425,6 +426,11 @@ def numpy_to_tensor(n):
 
 
 def fetch_image_predictions(db, blocklots: list[str]) -> dict[str, float]:
+    # check if schema exists first: 
+    # exists = db.run_query(
+    #     sql.SQL("SELECT schema_name FROM information_schema.schemata WHERE schema_name = {schema}").format(
+    #         schema=sql.Identifier(db.OUTPUT_SCHEMA)))
+    # logger.debug(f"resjults {row for row in exists}")
     resp = db.run_query(
         sql.SQL("SELECT blocklot, score FROM {table} WHERE blocklot IN %s").format(
             table=sql.Identifier(db.OUTPUT_SCHEMA, "image_model_predictions")

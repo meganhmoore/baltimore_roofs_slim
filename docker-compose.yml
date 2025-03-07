@@ -6,26 +6,27 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
+      POSTGRES_HOST: db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   roofs:
     build: .
-    shm_size: '16gb'
+    # shm_size: '16gb'
     depends_on:
       - db
     volumes:
       - .:/usr/src/app
       - /mnt/raid/projects/baltimore/images:/usr/src/app/data/aerial_images
-    deploy:
-      resources:
-        reservations:
-          devices:
-          - driver: nvidia
-            count: 1
-            capabilities: [gpu]
+    # # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #       - driver: nvidia
+    #         count: 1
+    #         capabilities: [gpu]
 
 volumes:
   postgres_data:

@@ -37,7 +37,7 @@ from .reporting import Reporter, evaluate
 
 load_dotenv()
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 this_dir = Path(__file__).resolve().parent
@@ -69,7 +69,7 @@ def db():
     "-m",
     type=click.Path(file_okay=False, dir_okay=True, exists=True, path_type=Path),
     help="path where models are stored",
-    default=this_dir.parent / "models",
+    default=this_dir.parent / "baltimoreroofs/modeling",
 )
 @click.pass_context
 def train(ctx, models_path):
@@ -385,11 +385,12 @@ def images_status(obj, hdf5):
         click.echo(f"\nThere are {n_datasets:,} blocklot images in the image database.")
         sample = random.sample(fetch_blocklots_imaged(f), k=3)
         click.echo(f"    Here are a few: {sample}")
-    image_preds = fetch_image_predictions(db, blocklots)
-    click.echo(
-        f"There are {len(image_preds):,} predictions from the image model "
-        "in the database."
-    )
+    # TODO need to check if any predictions have been done yet otherwise this next part will fail
+    # image_preds = fetch_image_predictions(db, blocklots)
+    # click.echo(
+    #     f"There are {len(image_preds):,} predictions from the image model "
+    #     "in the database."
+    # )
 
 
 @images.command
